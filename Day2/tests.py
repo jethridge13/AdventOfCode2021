@@ -18,7 +18,6 @@ class Test(unittest.TestCase):
 
     # Part 2 Tests
     def test2(self):
-        pass
         self.assertEqual(Day2.part2('Day2/example.txt'), 900)
 
 if __name__ == '__main__':
