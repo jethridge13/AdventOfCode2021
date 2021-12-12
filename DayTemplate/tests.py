@@ -4,7 +4,6 @@ import unittest
 class Test(unittest.TestCase):
 
     # Part 1 Tests
-
     def test1(self):
         pass
 
