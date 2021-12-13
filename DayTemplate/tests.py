@@ -1,6 +1,8 @@
 import Day
 import unittest
 
+path = 'Day/example.txt'
+
 class Test(unittest.TestCase):
 
     # Part 1 Tests
