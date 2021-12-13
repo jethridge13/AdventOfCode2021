@@ -35,6 +35,16 @@ class Board:
         s -= sum(self.marked)
         return s * self.marked[-1]
 
+    def printBoard(self):
+        temp = self.board
+        for call in self.marked:
+            i, j = self.numbers[str(call)]
+            temp[i][j] = '(%s)' % temp[i][j]
+        for i in temp:
+            for j in i:
+                print('%s\t' % j, end='')
+            print()
+
 def parseInput(path):
     boards = []
     calls = []
@@ -49,7 +59,8 @@ def parseInput(path):
                 boards.append(board)
                 temp = []
             else:
-                temp.append(line.split())
+                if len(line) > 1:
+                    temp.append(line.split())
             line = f.readline()
         board = Board(temp)
         boards.append(board)
@@ -62,15 +73,28 @@ def getWinningBoard(boards, calls):
                 return board.calcScore()
     return -1
 
+def getLastWinningBoard(boards, calls):
+    score = 0
+    for call in calls:
+        delete = []
+        for board in boards:
+            if board.mark(call):
+                score = board.calcScore()
+                delete.append(board)
+        for board in delete:
+            boards.remove(board)
+    return score
+
 def part1(path):
     boards, calls = parseInput(path)
     return getWinningBoard(boards, calls)
 
 def part2(path):
-    pass
+    boards, calls = parseInput(path)
+    return getLastWinningBoard(boards, calls)
 
 if __name__ == '__main__':
     # Part 1: 41668
     print(part1('Day4/input.txt'))
-    # Part 2: 
+    # Part 2: 10478
     print(part2('Day4/input.txt'))
