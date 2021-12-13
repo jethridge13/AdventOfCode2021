@@ -3,24 +3,37 @@ class Board:
     def __init__(self):
         self.board = []
 
-    def addLateralLine(self, start, end):
+    def addLine(self, start, end):
+        start = start.copy()
         highestCoord = max(start + end)
         if highestCoord > len(self.board):
-            self.expandBoard(highestCoord)
-        # TODO
+            self.expandBoard(highestCoord+1)
+        xinc = 1
+        yinc = 1
+        if start[0] == end[0]:
+            xinc = 0
+        elif start[0] > end[0]:
+            xinc = -1
+        if start[1] == end[1]:
+            yinc = 0
+        elif start[1] > end[1]:
+            yinc = -1
+        while start[0] != end[0] or start[1] != end[1]:
+            self.board[start[0]][start[1]] += 1
+            start[0] += xinc
+            start[1] += yinc
+        self.board[start[0]][start[1]] += 1
     
     def expandBoard(self, n):
         if n < len(self.board):
             return
         startingLength = len(self.board)
-        newline = [0] * n
-        diff = [0] * (n - len(self.board))
         for i in range(n - startingLength):
-            self.board.append(newline)
+            self.board.append([0] * n)
         if startingLength == 0:
             return
-        for i in range(len(self.board) - startingLength):
-            self.board[i] += diff
+        for i in range(len(self.board) - (len(self.board) - startingLength)):
+            self.board[i] += ([0] * (n - startingLength))
 
     def countDuplicateLines(self, n):
         count = 0
@@ -38,7 +51,22 @@ def parseLine(line):
     end = [int(x) for x in end]
     return start, end
 
+# True if line is horizontal or vertical, False if diagonal
+def lineIsAxial(start, end):
+    return start[0] == end[0] or start[1] == end[1]
+
 def part1(path):
+    board = Board()
+    with open(path, 'r') as f:
+        line = f.readline()
+        while line:
+            start, end = parseLine(line)
+            if lineIsAxial(start, end):
+                board.addLine(start, end)
+            line = f.readline()
+    return board.countDuplicateLines(2)
+
+def part2(path):
     board = Board()
     with open(path, 'r') as f:
         line = f.readline()
@@ -48,12 +76,9 @@ def part1(path):
             line = f.readline()
     return board.countDuplicateLines(2)
 
-def part2(path):
-    pass
-
 if __name__ == '__main__':
     path = 'Day5/input.txt'
-    # Part 1: 
+    # Part 1: 6189
     print(part1(path))
-    # Part 2: 
+    # Part 2: 19164
     print(part2(path))
