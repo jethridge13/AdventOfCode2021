@@ -21,7 +21,10 @@ def buildCaveMap(path):
             line = f.readline().replace('\n', '')
     return caveMap
 
-def findAllPaths(caveMap, cave='start', path=['start'], paths=[], visited = {'start': True}):
+def findAllPaths(caveMap):
+    return findAllPathsHelper(caveMap, 'start', ['start'], [], {'start': True})
+
+def findAllPathsHelper(caveMap, cave, path, paths, visited):
     for c in caveMap[cave].connections:
         if c in visited and visited[c]:
             continue
@@ -29,10 +32,10 @@ def findAllPaths(caveMap, cave='start', path=['start'], paths=[], visited = {'st
         if not caveMap[c].isBig:
             visited[c] = True
         if c == 'end':
-            paths.append(path)
+            paths.append(path.copy())
         else:
-            findAllPaths(caveMap, c, path, paths)
-        path.pop()
+            findAllPathsHelper(caveMap, c, path, paths, visited)
+        visited[path.pop()] = False
     return paths
 
 def part1(path):
@@ -44,7 +47,7 @@ def part2(path):
 
 if __name__ == '__main__':
     path = 'Day12/input.txt'
-    # Part 1: 
+    # Part 1: 4104
     print(part1(path))
     # Part 2: 
     print(part2(path))

@@ -32,7 +32,8 @@ class Test(unittest.TestCase):
                 ['start','b','A','c','A','end'],
                 ['start','b','A','end'],
                 ['start','b','end']]
-        self.assertCountEqual(Day12.findAllPaths(caveMap), ans)
+        result = Day12.findAllPaths(caveMap)
+        self.assertCountEqual(result, ans)
 
     def test1(self):
         self.assertEqual(Day12.part1(path), 10)
